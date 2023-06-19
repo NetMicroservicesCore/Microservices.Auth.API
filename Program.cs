@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SuPlaza.Compras.Pedidos.AuthAPI.Data;
+using SuPlaza.Compras.Pedidos.AuthAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 //agregamos  configuracion de  servicios de identidad
 ///almacenamos los servicios de identidad dentro de el frameworkStores de EntityFramework
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
     //utilizamos un proveedor de tokens  genericos
     .AddDefaultTokenProviders();
 
