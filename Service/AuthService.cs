@@ -11,12 +11,16 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
 
         private readonly AppDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManaManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
 
-        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager)
+
+        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager)
         {
             _dbContext = dbContext;
             _userManaManager = userManaManager;
+            _roleManager = roleManager;
+
         }
 
         public Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -24,9 +28,39 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
             throw new NotImplementedException();
         }
 
-        public Task<UserDto> Register(RegistrationRequestDto registrationRequestDto)
+        public async Task<UserDto> Register(RegistrationRequestDto registrationRequestDto)
         {
-            throw new NotImplementedException();
+            ApplicationUser user = new()
+            {
+                UserName = registrationRequestDto.Email,
+                Email = registrationRequestDto.Email,
+                NormalizedEmail =registrationRequestDto.Email.ToUpper(),
+                Name = registrationRequestDto.Name,
+                PhoneNumber = registrationRequestDto.PhoneNumber
+            };
+            try
+            {
+                var result = await _userManaManager.CreateAsync(user,registrationRequestDto.Password);
+                if (result.Succeeded)
+                {
+                    var userDtoReturn = _dbContext.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
+
+                    UserDto userDto = new()
+                    {
+                        Email = userDtoReturn.Email,
+                        Id= userDtoReturn.Id,
+                        Name = userDtoReturn.Name,
+                        PhoneNumber = userDtoReturn.PhoneNumber
+                    };
+                    return userDto;
+                }
+            }
+            catch (Exception ex)
+            {
+
+               string message = ex.Message;
+            }
+            return new UserDto();
         }
     }
 }
