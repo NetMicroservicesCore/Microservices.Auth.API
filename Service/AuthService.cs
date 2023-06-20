@@ -23,12 +23,34 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
 
         }
 
-        public Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+        public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
+            bool isValid = await _userManaManager.CheckPasswordAsync(user, loginRequestDto.Password);
+            if (user == null || isValid == false)
+            {
+                return new LoginResponseDto() { User = null, Token = "" };
+            }
+            //password encontrado
+
+            UserDto userDto = new()
+            {
+                Email = user.Email,
+                Id = user.Id,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber
+            };
+            LoginResponseDto loginResponseDto = new LoginResponseDto()
+            {
+                User = userDto,
+                Token = ""
+            };
+
+
+
         }
 
-        public async Task<UserDto> Register(RegistrationRequestDto registrationRequestDto)
+        public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
         {
             ApplicationUser user = new()
             {
@@ -48,11 +70,14 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
                     UserDto userDto = new()
                     {
                         Email = userDtoReturn.Email,
-                        Id= userDtoReturn.Id,
+                        Id = userDtoReturn.Id,
                         Name = userDtoReturn.Name,
                         PhoneNumber = userDtoReturn.PhoneNumber
                     };
-                    return userDto;
+                    return string.Empty;
+                }
+                else {
+                    return result.Errors.FirstOrDefault().Description;
                 }
             }
             catch (Exception ex)
@@ -60,7 +85,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
 
                string message = ex.Message;
             }
-            return new UserDto();
+            return "Ocurrio un error al registrar los datos.";
         }
     }
 }
