@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SuPlaza.Compras.Pedidos.AuthAPI.Models;
 using SuPlaza.Compras.Pedidos.AuthAPI.Service.IService;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,9 +11,9 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly JwtOptions _jwtOptions;
-        public JwtTokenGenerator(JwtOptions jwtOptions)
+        public JwtTokenGenerator(IOptions<JwtOptions> jwtOptions)
         {
-            _jwtOptions = jwtOptions;
+            _jwtOptions = jwtOptions.Value;
         }
         public string GenerateToken(ApplicationUser applicationUser)
         {

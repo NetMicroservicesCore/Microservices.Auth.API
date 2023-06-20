@@ -12,15 +12,15 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
         private readonly AppDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManaManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IJwtTokenGenerator _jwtTokenGenerator;
 
 
-
-        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager)
+        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
         {
             _dbContext = dbContext;
             _userManaManager = userManaManager;
             _roleManager = roleManager;
-
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -32,6 +32,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
                 return new LoginResponseDto() { User = null, Token = "" };
             }
             //password encontrado
+            var token = _jwtTokenGenerator.GenerateToken(user);
 
             UserDto userDto = new()
             {
@@ -43,7 +44,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,
-                Token = ""
+                Token = token
             };
             return loginResponseDto;
 
