@@ -34,9 +34,17 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            return Ok();
+            var loginResponse = await _authService.Login(model);
+            if (loginResponse.User == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "El nombre de usuario o el password es incorrecto";
+                return BadRequest(_response);
+            }
+            _response.Data = loginResponse;
+            return Ok(_response);
         }
 
 

@@ -45,7 +45,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
                 User = userDto,
                 Token = ""
             };
-
+            return loginResponseDto;
 
 
         }
