@@ -27,7 +27,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
         {
             var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
             if (user != null) {
-                if(_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+                if(!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
                 {
                     _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
                 }

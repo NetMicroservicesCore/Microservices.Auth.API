@@ -47,6 +47,19 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPost("assignRole")]
+        public async Task<IActionResult>AssignRole([FromBody] RegistrationRequestDto model)
+        {
+            var rolResponse = await _authService.AssignRole(model.Email,model.Role.ToUpper());
+            if (!rolResponse)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "La asignación del rol fallo";
+                return BadRequest(_response);
+            }
+            
+            return Ok(_response);
+        }
 
     }
 }
