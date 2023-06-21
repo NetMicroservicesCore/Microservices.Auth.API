@@ -5,22 +5,22 @@ using SuPlaza.Compras.Pedidos.AuthAPI.Service.IService;
 
 namespace SuPlaza.Compras.Pedidos.AuthAPI.Controllers
 {
-    [Route("api/[auth]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class AuthAPIController : ControllerBase
+    public class AuthApiController : ControllerBase
     {
 
         private readonly IAuthService _authService;
         protected ResponseDto _response;
 
-        public AuthAPIController(IAuthService authService)
+        public AuthApiController(IAuthService authService)
         {
             _authService = authService;
             _response = new();
         }
 
 
-        [HttpPost("registro")]
+        [HttpPost("register")]
         public async Task<IActionResult> Registro([FromBody] RegistrationRequestDto model)
         {
             var message = await _authService.Register(model);
@@ -47,8 +47,8 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Controllers
             return Ok(_response);
         }
 
-        [HttpPost("assignRole")]
-        public async Task<IActionResult>AssignRole([FromBody] RegistrationRequestDto model)
+        [HttpPost("AssignRole")]
+        public async Task<IActionResult> AssignRole([FromBody] RegistrationRequestDto model)
         {
             var rolResponse = await _authService.AssignRole(model.Email,model.Role.ToUpper());
             if (!rolResponse)

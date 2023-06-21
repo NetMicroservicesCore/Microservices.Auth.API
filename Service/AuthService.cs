@@ -12,7 +12,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
         private readonly AppDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManaManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
 
         public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
