@@ -8,21 +8,18 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
 {
     public class AuthService : IAuthService
     {
-
         private readonly AppDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManaManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-
-
-        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager, IJwtTokenGenerator jwtTokenGenerator)
+        public AuthService(AppDbContext dbContext, UserManager<ApplicationUser> userManaManager, RoleManager<IdentityRole> roleManager,
+            IJwtTokenGenerator jwtTokenGenerator)
         {
             _dbContext = dbContext;
             _userManaManager = userManaManager;
             _roleManager = roleManager;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
-
         public async Task<bool> AssignRole(string email, string roleName)
         {
             var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
@@ -35,9 +32,7 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
                 return true;
             }
             return false;
-
         }
-
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
@@ -62,8 +57,6 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Service
                 Token = token
             };
             return loginResponseDto;
-
-
         }
 
         public async Task<string> Register(RegistrationRequestDto registrationRequestDto)

@@ -62,11 +62,5 @@ namespace SuPlaza.Compras.Pedidos.AuthAPI.Controllers
         }
 
 
-
-     
-
-
-
-
     }
 }
